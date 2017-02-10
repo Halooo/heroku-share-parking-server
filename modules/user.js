@@ -23,7 +23,7 @@ const UserInfo = new Schema({
 });
 
 // create model
-const users = mongoose.model('newClass', UserInfo);
+const User = mongoose.model('user', UserInfo);
 
-module.exports = users;
+module.exports = User;
 
