@@ -11,6 +11,11 @@ const ListInfo = new Schema({
     location: String,
     fare: Number,
     author: String,
+    email: String,
+    name: String,
+    phone: String,
+    wechat: String,
+    fb: String,
 });
 
 // create model

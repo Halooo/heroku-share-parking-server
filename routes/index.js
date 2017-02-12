@@ -19,10 +19,11 @@ const routes = (app) => {
             phone: data.phone,
             fb: data.fb,
             wechat: data.wechat,
+            pw: data.pw,
         };
         const newuser = new User(newUser);
         User.find({email: newUser.email}, (err, result) => {
-            if(result) {
+            if(result[0]) {
                 res.json({
                     error: 'Email Already Exist'
                 })
@@ -47,26 +48,40 @@ const routes = (app) => {
     });
 
     app.post('/login', (req, res) => {
-        const data = req.body.data;
+        const data = req.body.data.data;
         let loginInfo = {
             email: data.email,
         };
-        User.find(loginInfo, (err, result) => {
-            if (err) {
-                res.status(500).json({
-                    error: err
-                })
-            }
-            else if (data.pw !== result.pw) {
-                res.status(403).json({
-                    error: err,
-                    message: 'Password does not match'
-                })
-            }
-            else {
-                res.json(result)
-            }
-        })
+        if (!data) {
+            res.status(404).send({
+                error: 'user not found'
+            })
+        }
+        else {
+            User.find(loginInfo, (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        error: err
+                    })
+                }
+                else if (!result[0]) {
+                    res.status(404).send({
+                        error: 'user not found'
+                    })
+                }
+                else if (data.email !== result[0].email) {
+                    res.status(403).json({
+                        error: err,
+                        message: 'Password does not match'
+                    })
+                }
+                else {
+
+                    res.json(result)
+                }
+            })
+        }
+
     });
 
     app.post('/create', (req, res) => {
@@ -77,7 +92,13 @@ const routes = (app) => {
             location: data.location,
             fare: data.sharedFare,
             author: data.email,
+            email: data.contact.emal,
+            name: data.contact.name,
+            phone: data.contact.phone,
+            wechat: data.contact.wechat,
+            fb: data.contact.fb,
         };
+        console.log(loginInfo)
         const newList = new List(loginInfo);
         newList.save((err) => {
             if(err) {
@@ -91,9 +112,8 @@ const routes = (app) => {
     });
 
     app.get('/list', (req,res) => {
-        const data = req.body.data;
-
         List.find({}, (err, result) => {
+            console.log(result)
             if (err) {
                 res.status(500).json({
                     error: err
@@ -109,9 +129,35 @@ const routes = (app) => {
         })
     });
 
-    app.get('/list/:id', (req,res) => {
+    app.get('/mylist', (req,res) => {
+        const author = req.data.author;
+        if (author) {
+            List.find({author: author}, (err, result) => {
+                if (err) {
+                    res.status(500).send({error: err})
+                }
+                else {
+                    let listMap = {};
+                    result.forEach((item) => {
+                        listMap[item._id] = item;
+                    });
+                    res.send(listMap)
+                }
+            })
+        }
+    });
 
-    })
+    app.delete('/delete', (req, res) => {
+        const data = req.body.data;
+        List.remove(data, (err, result) => {
+            if (err) {
+                res.status(500).send(err)
+            }
+            else {
+                res.send(result);
+            }
+        })
+    });
 };
 
 module.exports = routes;

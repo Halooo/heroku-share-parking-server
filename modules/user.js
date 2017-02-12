@@ -3,8 +3,9 @@
  */
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
-
-mongoose.connect('mongodb://share-parking:' + 'share-parking' + '@ds147979.mlab.com:47979/share-parking');
+const dbAddr = 'mongodb://share-parking:' + 'share-parking' + '@ds147979.mlab.com:47979/share-parking';
+const testdb = 'mongodb://localhost:27017/share-parking'
+mongoose.connect(testdb);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error'));
