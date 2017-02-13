@@ -4,6 +4,7 @@
 
 import User from '../modules/user';
 import List from '../modules/list';
+import mongoose from 'mongoose';
 
 const routes = (app) => {
     app.get('/', (request, response) => {
@@ -98,7 +99,6 @@ const routes = (app) => {
             wechat: data.contact.wechat,
             fb: data.contact.fb,
         };
-        console.log(loginInfo)
         const newList = new List(loginInfo);
         newList.save((err) => {
             if(err) {
@@ -113,7 +113,6 @@ const routes = (app) => {
 
     app.get('/list', (req,res) => {
         List.find({}, (err, result) => {
-            console.log(result)
             if (err) {
                 res.status(500).json({
                     error: err
@@ -129,29 +128,16 @@ const routes = (app) => {
         })
     });
 
-    app.get('/mylist', (req,res) => {
-        const author = req.data.author;
-        if (author) {
-            List.find({author: author}, (err, result) => {
-                if (err) {
-                    res.status(500).send({error: err})
-                }
-                else {
-                    let listMap = {};
-                    result.forEach((item) => {
-                        listMap[item._id] = item;
-                    });
-                    res.send(listMap)
-                }
-            })
-        }
-    });
-
-    app.delete('/delete', (req, res) => {
+    app.post('/del', (req, res) => {
         const data = req.body.data;
-        List.remove(data, (err, result) => {
+
+        const toSearch = {
+            _id: mongoose.Types.ObjectId(data._id)
+        };
+        List.find(toSearch).remove((err, result) => {
+            // console.log(err, result)
             if (err) {
-                res.status(500).send(err)
+                res.status(500).send(err);
             }
             else {
                 res.send(result);
