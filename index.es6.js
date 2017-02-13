@@ -23,9 +23,9 @@ app.use(cookieParser());
 /* enable cors */
 app.use(cors());
 console.log('CORS enabled');
-const staticPath = path.join(__dirname + '/public');
-console.log(staticPath)
+const staticPath = path.join(__dirname, 'public');
 app.use(express.static(staticPath));
+
 
 // views is directory for all template files
 // app.set('views', __dirname + '/views');

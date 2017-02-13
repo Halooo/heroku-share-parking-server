@@ -5,10 +5,11 @@
 import User from '../modules/user';
 import List from '../modules/list';
 import mongoose from 'mongoose';
+import path from "path";
 
 const routes = (app) => {
     app.get('/', (request, response) => {
-        response.render('../public/index.html');
+        response.sendFile(path.join(__dirname, '/index.html'));
     });
 
     app.post('/signup', (req, res) => {
