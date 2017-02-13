@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 
 const routes = (app) => {
     app.get('/', (request, response) => {
-        response.render('pages/index');
+        response.render('../public/index.html');
     });
 
     app.post('/signup', (req, res) => {

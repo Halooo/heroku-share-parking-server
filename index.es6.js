@@ -6,7 +6,7 @@ let app = express();
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
+import path from "path";
 
 // database config
 import mongoose from 'mongoose';
@@ -23,11 +23,13 @@ app.use(cookieParser());
 /* enable cors */
 app.use(cors());
 console.log('CORS enabled');
-app.use(express.static(__dirname + '/public'));
+const staticPath = path.join(__dirname + '/public');
+console.log(staticPath)
+app.use(express.static(staticPath));
 
 // views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+// app.set('views', __dirname + '/views');
+// app.set('view engine', 'ejs');
 
 routes(app);
 
