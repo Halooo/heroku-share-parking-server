@@ -5,7 +5,6 @@ import express from 'express';
 let app = express();
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import path from "path";
 
 // database config
@@ -24,7 +23,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 /* enable cors */
-app.use(cors());
 console.log('CORS enabled');
 
 // views is directory for all template files
