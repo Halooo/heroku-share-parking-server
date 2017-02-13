@@ -9,7 +9,7 @@ import path from "path";
 
 const routes = (app) => {
     app.get('/', (request, response) => {
-        response.sendFile(path.join(__dirname, '/index.html'));
+        response.sendFile(path.join(__dirname, '../index.html'));
     });
 
     app.post('/signup', (req, res) => {
